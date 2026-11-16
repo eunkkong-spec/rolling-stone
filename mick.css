@@ -1,0 +1,21 @@
+#mick {
+  left: calc(800 * var(--u));
+  top: calc(390 * var(--u));
+  height: calc(490 * var(--u));
+  width: auto;
+  transform: translateX(calc(-1150 * var(--u)));
+  pointer-events: none;
+}
+
+.p4.active #mick {
+  animation: mick-walk 4s linear forwards;
+}
+
+.p4.kick #mick {
+  visibility: hidden;
+}
+
+@keyframes mick-walk {
+  from { transform: translateX(calc(-1150 * var(--u))); }
+  to { transform: translateX(0); }
+}
