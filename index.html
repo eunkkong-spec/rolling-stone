@@ -349,7 +349,11 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .intro small{position:absolute;left:16px;right:16px;bottom:5vh;font:13px/1.7 'Jalnan 2',sans-serif;color:#999;text-align:center}
 .intro.gone{opacity:0;pointer-events:none}
 .hint{position:fixed;z-index:5;left:50%;bottom:7vh;transform:translateX(-50%);font-family:'Creepster',cursive;
-  font-size:22px;letter-spacing:.25em;color:#777;animation:blink 1.6s infinite;pointer-events:none}
+  font-size:30px;letter-spacing:.25em;color:#666;animation:dragHint 2s ease-in-out infinite;pointer-events:none}
+/* 손으로 끌어당기듯 오른쪽으로 쓱 밀렸다 돌아오고, 화살표는 한 발 더 나간다 */
+.hint span{display:inline-block;animation:dragArrow 2s ease-in-out infinite}
+@keyframes dragHint{0%,100%{transform:translateX(-50%);opacity:.75}40%{transform:translateX(calc(-50% + 18px));opacity:1}55%{transform:translateX(calc(-50% + 14px))}}
+@keyframes dragArrow{0%,100%{transform:none;opacity:.6}40%{transform:translateX(14px);opacity:1}55%{transform:translateX(10px)}}
 @keyframes blink{50%{opacity:.3}}
 .dots{position:fixed;z-index:5;right:3vw;bottom:3vh;display:flex;align-items:center;gap:8px}
 .home{display:grid;place-items:center;width:22px;height:22px;margin-right:6px;padding:0;border:0;border-radius:50%;
@@ -666,7 +670,7 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 </main>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="crayon"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="5"/></filter></svg>
-<p class="hint">CLICK OR DRAG &rarr;</p>
+<p class="hint">CLICK OR DRAG <span>&rarr;</span></p>
 <div class="intro"><p>CLICK TO START</p>
   <div class="snd"><button type="button">&#128263; SOUND OFF</button></div>
   <small>이 페이지는 비상업적 팬 페이지이며 포트폴리오용으로 제작되었습니다.<br>
