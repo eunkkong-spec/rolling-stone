@@ -691,10 +691,19 @@ function startMusic() {
 }
 music.addEventListener('pointerdown', e => e.stopPropagation());
 // 다른 유튜브 영상 바로가기를 누르면 재생 중이던 곡을 멈춘다
-document.querySelectorAll('a[href*="youtu"]').forEach(a => a.addEventListener('click', () => {
+let leftForLink = 0;
+function pauseMusic() {
   wantMusic = false;
   if (playerReady) player.pauseVideo();
-}));
+}
+document.querySelectorAll('a[href*="youtu"]').forEach(a => {
+  a.addEventListener('pointerdown', () => { leftForLink = Date.now(); pauseMusic(); });
+  a.addEventListener('click', pauseMusic);
+});
+// 새 탭으로 넘어가 페이지가 가려질 때 한 번 더 멈춘다 (광고 재생 중 등 첫 요청이 무시된 경우 대비)
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && Date.now() - leftForLink < 5000) pauseMusic();
+});
 music.querySelector('button').addEventListener('click', () => {
   wantMusic = false;
   music.classList.remove('on');
