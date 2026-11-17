@@ -69,7 +69,7 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .p3.active .stone{opacity:1;cursor:pointer;animation:rollIn 2s .3s cubic-bezier(.2,.7,.3,1) both,roll 2.6s 2.3s ease-in-out infinite alternate}
 .p3.painted .stone .black{opacity:1}
 .tap{transform:translateX(-50%);opacity:0;pointer-events:none;
-  font:italic 700 calc(20*var(--u)) 'Playfair Display',Georgia,serif;letter-spacing:.08em;color:#000;text-align:center;white-space:nowrap}
+  font:italic 700 calc(28*var(--u)) 'Playfair Display',Georgia,serif;letter-spacing:.08em;color:#000;text-align:center;white-space:nowrap}
 /* 크레용으로 그은 듯한 손그림 화살표: 그려졌다가 대상 쪽으로 콕콕 찌르며 클릭을 유도 */
 .tap .ct{display:inline-block;animation:tapWiggle 1.6s ease-in-out infinite}
 @keyframes tapWiggle{0%,60%,100%{transform:none}70%{transform:scale(1.15) rotate(-6deg)}80%{transform:scale(1.1) rotate(5deg)}90%{transform:scale(1.12) rotate(-3deg)}}
@@ -82,7 +82,7 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 @keyframes drawShaft{0%{stroke-dashoffset:1;opacity:1}35%,85%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
 @keyframes drawHead{0%,35%{stroke-dashoffset:1;opacity:1}50%,85%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
 @keyframes nudge{0%,100%{transform:none}50%{transform:translate(calc(var(--nx)*8*var(--u)),calc(var(--ny)*8*var(--u)))}}
-.p3 .tap{left:calc(1040*var(--u));top:calc(400*var(--u))}
+.p3 .tap{left:calc(1040*var(--u));top:calc(425*var(--u))}
 .p3.active:not(.painted) .tap{animation:fadeIn .4s 3.2s forwards}
 @keyframes rollIn{from{transform:translateX(calc(-1300*var(--u))) rotate(-1080deg)}to{transform:translateX(0) rotate(0)}}
 
@@ -105,7 +105,7 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .can4{left:calc(1050*var(--u));top:calc(600*var(--u));width:calc(110*var(--u))}
 .can4 img{width:100%}
 .p4.arrived:not(.kick) .can4{cursor:pointer}
-.p4 .tap{left:calc(1105*var(--u));top:calc(525*var(--u))}
+.p4 .tap{left:calc(1105*var(--u));top:calc(490*var(--u))}
 .p4.arrived:not(.kick) .tap{animation:fadeIn .4s 3s forwards}
 .p4.kick .can4{animation:fly 1.1s .15s cubic-bezier(.25,.6,.4,1) forwards}
 @keyframes fly{to{transform:translate(40vw,-70vh) rotate(800deg)}}
@@ -563,7 +563,7 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
         <p>A rolling stone<br>gathers<br>no<br>moss.</p>
       </div>
       <div class="stk rock" style="--x:794;--y:295;--w:252;--r:-20deg;--d:1.1s"><div><img src="images/.SUB2/stone-gray.png" alt="구르는 돌"></div></div>
-      <div class="tap" style="--x:1040;--y:385"><svg class="arrow left" viewBox="0 0 100 60"><g transform="translate(100 0) scale(-1 1)"><path pathLength="1" d="M6 36C18 8 34 10 42 30S66 42 90 30"/><path pathLength="1" d="M74 17L91 30L77 45"/></g></svg><span class="ct">CLICK!!</span></div>
+      <div class="tap" style="--x:1040;--y:400"><svg class="arrow left" viewBox="0 0 100 60"><g transform="translate(100 0) scale(-1 1)"><path pathLength="1" d="M6 36C18 8 34 10 42 30S66 42 90 30"/><path pathLength="1" d="M74 17L91 30L77 45"/></g></svg><span class="ct">CLICK!!</span></div>
       <p class="bubble" style="--x:1100;--y:150">롤링스톤즈는 1962년 런던에서 록 밴드를 결성하며<br>
         지금까지 꾸준히 활동하고 있다.<br>
         마치 구르는 돌에 이끼가 끼지 않은 듯...</p>
