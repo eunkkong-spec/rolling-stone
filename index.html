@@ -362,18 +362,10 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .dots i:nth-child(3n+1){--pr:-18deg;width:14px;border-radius:50% 50% 40% 60% / 45% 60% 40% 55%}
 .dots i:nth-child(4n){height:13px}
 .dots i:hover{transform:rotate(var(--pr,0deg)) scale(1.2)}
-/* 어항 속 자갈처럼 알록달록 */
-.dots i:nth-of-type(1){--c1:#fff;--c2:#cfcfcf}
-.dots i:nth-of-type(2){--c1:#666;--c2:#111}
-.dots i:nth-of-type(3){--c1:#c9a3ff;--c2:#6b2fbf}
-.dots i:nth-of-type(4){--c1:#ffb3d9;--c2:#e0438f}
-.dots i:nth-of-type(5){--c1:#b3e5ff;--c2:#2b8ed6}
-.dots i:nth-of-type(6){--c1:#9ff0d8;--c2:#159b7f}
-.dots i:nth-of-type(7){--c1:#ff9a9a;--c2:#d02c2c}
-.dots i:nth-of-type(8){--c1:#fff3a0;--c2:#e0b400}
-.dots i:nth-of-type(9){--c1:#e2d4ff;--c2:#9a7fd6}
-.dots i:nth-of-type(10){--c1:#ffd0a0;--c2:#e47a1a}
-.dots i:nth-of-type(11){--c1:#8fa3ff;--c2:#23339c}
+/* 검은 자갈과 회색 자갈을 섞어서 */
+.dots i:nth-of-type(odd){--c1:#d6d6d6;--c2:#8a8a8a}
+.dots i:nth-of-type(even){--c1:#555;--c2:#111}
+.dots i:nth-of-type(3n){--c1:#b5b5b5;--c2:#5e5e5e}
 .dots i.on{--ps:1.5;outline:2px solid #111;outline-offset:2px;transform:rotate(var(--pr,0deg)) scale(1.5)}
 .dots i.roll{animation:pebbleRoll .7s cubic-bezier(.3,.7,.4,1)}
 @keyframes pebbleRoll{
