@@ -354,7 +354,14 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .dots i:nth-child(3n+1){--pr:-18deg;width:14px;border-radius:50% 50% 40% 60% / 45% 60% 40% 55%}
 .dots i:nth-child(4n){height:13px}
 .dots i:hover{transform:rotate(var(--pr,0deg)) scale(1.2)}
-.dots i.on{background:radial-gradient(circle at 35% 30%,#666,#1a1a1a 65%,#000);transform:rotate(var(--pr,0deg)) scale(1.35)}
+.dots i.on{--ps:1.35;background:radial-gradient(circle at 35% 30%,#666,#1a1a1a 65%,#000);transform:rotate(var(--pr,0deg)) scale(1.35)}
+.dots i.roll{animation:pebbleRoll .7s cubic-bezier(.3,.7,.4,1)}
+@keyframes pebbleRoll{
+  0%{transform:rotate(var(--pr,0deg)) scale(var(--ps,1))}
+  35%{transform:translateY(-4px) rotate(calc(var(--pr,0deg) + 200deg)) scale(var(--ps,1))}
+  70%{transform:rotate(calc(var(--pr,0deg) + 340deg)) scale(var(--ps,1))}
+  100%{transform:rotate(calc(var(--pr,0deg) + 360deg)) scale(var(--ps,1))}
+}
 .dots.locked i,.dots.locked .home,.dots.locked .finger{cursor:not-allowed;opacity:.45}
 .dots.locked i:hover{transform:rotate(var(--pr,0deg))}
 .dots.locked i.on{opacity:1}
@@ -665,10 +672,20 @@ function unlockNav() {
 pages.forEach(() => dotsWrap.appendChild(document.createElement('i')));
 const dots = [...dotsWrap.children];
 dotsWrap.classList.toggle('locked', !unlocked);
-dots.forEach((d, n) => d.addEventListener('pointerdown', e => {
-  e.stopPropagation();
-  if (unlocked) goTo(n);
-}));
+// 자갈이 제자리에서 한 바퀴 구른다
+function rollPebble(d) {
+  d.classList.remove('roll');
+  void d.offsetWidth;
+  d.classList.add('roll');
+}
+dots.forEach((d, n) => {
+  d.addEventListener('animationend', () => d.classList.remove('roll'));
+  d.addEventListener('pointerdown', e => {
+    e.stopPropagation();
+    rollPebble(d);
+    if (unlocked) goTo(n);
+  });
+});
 
 const home = document.createElement('button');
 home.className = 'home';
@@ -826,6 +843,7 @@ function goTo(i) {
   if (i === pages.length - 1) unlockNav();
   snap();
   dots.forEach((d, n) => d.classList.toggle('on', n === i));
+  rollPebble(dots[i]);
   timers.push(setTimeout(() => { locked = false; activate(i); }, 1000));
 }
 
