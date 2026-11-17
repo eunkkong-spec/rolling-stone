@@ -211,7 +211,7 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .p8.painted .rock img{animation:spin 6s linear infinite,blacken .8s forwards}
 @keyframes blacken{to{filter:brightness(.2) contrast(1.2)}}
 .p8 .tap{display:flex;align-items:center;gap:calc(6*var(--s));transform:none}
-.p8.active:not(.painted) .tap{animation:fadeIn .4s 4.8s forwards}
+.p8.active:not(.painted) .tap{animation:fadeIn .4s 2s forwards}
 @keyframes spin{to{transform:rotate(360deg)}}
 .tri{width:calc(360*var(--s));opacity:0;transform-origin:45% 30%;filter:drop-shadow(0 calc(5*var(--s)) calc(3*var(--s)) rgba(0,0,0,.18))}
 .p8.active .tri{animation:popLogo .5s .9s cubic-bezier(.2,1.6,.4,1) forwards}
