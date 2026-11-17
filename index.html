@@ -327,7 +327,8 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .snd{display:flex;gap:12px}
 .snd button{padding:10px 18px;border:2px solid #111;border-radius:999px;background:#fff;box-shadow:3px 3px 0 #111;cursor:pointer;
   font:italic 700 14px 'Playfair Display',Georgia,serif;letter-spacing:.15em;color:#111;transition:transform .15s,background .15s}
-.snd button:hover{background:#ffe600;transform:translate(-1px,-1px)}
+.snd button:hover{transform:translate(-1px,-1px)}
+.snd button.on{background:#ffe600}
 .mute{display:grid;place-items:center;width:22px;height:22px;margin-right:2px;padding:0;border:0;border-radius:50%;
   background:#111;color:#fff;font-size:11px;cursor:pointer;transition:transform .2s}
 .mute:hover{transform:scale(1.15)}
@@ -664,7 +665,7 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 
 <p class="hint">CLICK OR DRAG &rarr;</p>
 <div class="intro"><p>CLICK TO START</p>
-  <div class="snd"><button type="button" data-s="1">&#128266; SOUND ON</button><button type="button" data-s="0">&#128263; SOUND OFF</button></div>
+  <div class="snd"><button type="button">&#128263; SOUND OFF</button></div>
   <small>이 페이지는 비상업적 팬 페이지이며 포트폴리오용으로 제작되었습니다.<br>
   모든 이미지·음원·영상의 저작권은 각 권리자에게 있습니다.</small></div>
 <div class="dots"></div>
@@ -761,21 +762,24 @@ function clearTimers() { timers.forEach(clearTimeout); timers = []; }
 const stepSrcs = ['sounds/step1.mp3', 'sounds/step2.mp3', 'sounds/step3.mp3', 'sounds/step4.mp3'];
 stepSrcs.concat('sounds/laugh.mp3').forEach(src => { const a = new Audio(src); a.preload = 'auto'; });
 // 소리 켜기/끄기: 시작 화면에서 고르고, 아래 내비게이션 스피커 버튼으로 언제든 바꿀 수 있다
-let soundOn = true;
+let soundOn = false;
 const muteBtn = document.createElement('button');
 muteBtn.className = 'mute';
-function setSound(on) {
+const introSnd = document.querySelector('.snd button');
+function setSound(on, init) {
   soundOn = on;
   muteBtn.textContent = on ? '🔊' : '🔇';
+  introSnd.textContent = on ? '🔊 SOUND ON' : '🔇 SOUND OFF';
+  introSnd.classList.toggle('on', on);
   muteBtn.setAttribute('aria-label', on ? '소리 끄기' : '소리 켜기');
-  if (!on && typeof pauseMusic === 'function') pauseMusic();
+  if (!on && !init) pauseMusic();
 }
 muteBtn.addEventListener('pointerdown', e => {
   e.stopPropagation();
   setSound(!soundOn);
 });
 dotsWrap.prepend(muteBtn);
-setSound(true);
+setSound(false, true);
 
 function playSfx(src, vol) {
   if (!soundOn) return;
@@ -955,14 +959,16 @@ dots[0].classList.add('on');
 // 브라우저는 첫 클릭 전에는 소리를 막기 때문에, 시작 화면을 한 번 눌러야 1페이지 발자국 소리부터 들린다
 const intro = document.querySelector('.intro');
 locked = true;
-intro.addEventListener('pointerdown', e => {
+// 소리는 기본 꺼짐. 시작 화면의 SOUND 버튼을 눌러야 켜지고, 버튼 밖을 누르면 시작
+function startIntro(e) {
   e.stopPropagation();
-  const choice = e.target.closest('[data-s]');
-  setSound(choice ? choice.dataset.s === '1' : true);
+  if (introSnd.contains(e.target)) return setSound(!soundOn);
+  intro.removeEventListener('pointerdown', startIntro);
   intro.classList.add('gone');
   locked = false;
   activate(0);
-}, { once: true });
+}
+intro.addEventListener('pointerdown', startIntro);
 </script>
 </body>
 </html>
