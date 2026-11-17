@@ -333,6 +333,18 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .home{display:grid;place-items:center;width:22px;height:22px;margin-right:6px;padding:0;border:0;border-radius:50%;
   background:#111;color:#fff;cursor:pointer;transition:transform .2s}
 .home:hover{transform:scale(1.15)}
+.finger{width:30px;height:30px;margin-right:2px;padding:0;border:2px solid #111;border-radius:50%;background:#ffe600;
+  font-size:16px;line-height:1;cursor:pointer;box-shadow:2px 2px 0 #111;transition:transform .2s}
+.finger:hover,.finger.open{transform:scale(1.12) rotate(-8deg)}
+.navmenu{position:fixed;z-index:7;right:3vw;bottom:calc(3vh + 44px);margin:0;padding:8px;list-style:none;
+  border:3px solid #111;border-radius:14px;background:#fff7e3;box-shadow:6px 6px 0 #111;font:14px/1 'Jalnan 2',sans-serif;
+  opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .25s,transform .25s}
+.navmenu.open{opacity:1;transform:none;pointer-events:auto}
+.navmenu li{display:flex;gap:10px;align-items:center;padding:8px 12px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.navmenu li i{font-style:normal;color:#999;min-width:18px;text-align:right}
+.navmenu li:hover{background:#ffe600}
+.navmenu li.on{background:#111;color:#fff}
+.navmenu li.on i{color:#ffe600}
 .home svg{width:12px;height:12px}
 .dots i{width:8px;height:8px;border-radius:50%;background:#bbb;transition:.3s;cursor:pointer;
   outline:6px solid transparent}
@@ -648,6 +660,43 @@ home.addEventListener('pointerdown', e => {
   goTo(0);
 });
 dotsWrap.prepend(home);
+
+// 손가락 버튼: 누르면 페이지 목록이 열려 언제든 원하는 페이지로 바로 이동
+const pageNames = ['발자국', 'A rolling stone gathers no moss', '구르는 돌에 검게 칠해!!', '시대의 영원한 악동',
+  'Paint It, Black', 'The Rolling Stones', '로고 이야기', 'Prologue', 'Member Introduction 1',
+  'Member Introduction 2', 'Music Listening'];
+dots.forEach((d, n) => d.title = `${n + 1}. ${pageNames[n] || ''}`);
+const finger = document.createElement('button');
+finger.className = 'finger';
+finger.setAttribute('aria-label', '페이지 목록');
+finger.textContent = '👆';
+const navMenu = document.createElement('ul');
+navMenu.className = 'navmenu';
+navMenu.innerHTML = pageNames.map((name, n) => `<li data-n="${n}"><i>${n + 1}</i>${name}</li>`).join('');
+document.body.appendChild(navMenu);
+function toggleMenu(open) {
+  navMenu.classList.toggle('open', open);
+  finger.classList.toggle('open', open);
+  navMenu.querySelectorAll('li').forEach((li, n) => li.classList.toggle('on', n === index));
+}
+finger.addEventListener('pointerdown', e => {
+  e.stopPropagation();
+  toggleMenu(!navMenu.classList.contains('open'));
+});
+navMenu.addEventListener('pointerdown', e => {
+  e.stopPropagation();
+  const li = e.target.closest('li');
+  if (!li) return;
+  toggleMenu(false);
+  goTo(+li.dataset.n);
+});
+// 목록이 열려 있을 때 바깥을 누르면 목록만 닫고 페이지는 넘기지 않는다
+window.addEventListener('pointerdown', e => {
+  if (!navMenu.classList.contains('open') || navMenu.contains(e.target) || finger.contains(e.target)) return;
+  e.stopPropagation();
+  toggleMenu(false);
+}, true);
+dotsWrap.prepend(finger);
 
 function clearTimers() { timers.forEach(clearTimeout); timers = []; }
 
