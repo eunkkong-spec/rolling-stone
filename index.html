@@ -346,10 +346,18 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .navmenu li.on{background:#111;color:#fff}
 .navmenu li.on i{color:#ffe600}
 .home svg{width:12px;height:12px}
-.dots i{width:8px;height:8px;border-radius:50%;background:#bbb;transition:.3s;cursor:pointer;
-  outline:6px solid transparent}
-.dots i:hover{background:#666}
-.dots i.on{background:#111;transform:scale(1.4)}
+/* 자갈 모양 페이지 점: 하나하나 모양과 각도가 조금씩 다르고, 지금 페이지는 검게 칠한 돌 */
+.dots i{width:15px;height:12px;border-radius:55% 45% 50% 50% / 60% 55% 45% 40%;cursor:pointer;
+  background:radial-gradient(circle at 35% 30%,#e4e4e4,#9a9a9a 70%,#777);box-shadow:inset -1px -2px 2px rgba(0,0,0,.25),1px 1px 1px rgba(0,0,0,.15);
+  outline:6px solid transparent;transform:rotate(var(--pr,0deg));transition:transform .3s,background .3s}
+.dots i:nth-child(3n){--pr:25deg;border-radius:45% 55% 60% 40% / 50% 45% 55% 50%}
+.dots i:nth-child(3n+1){--pr:-18deg;width:14px;border-radius:50% 50% 40% 60% / 45% 60% 40% 55%}
+.dots i:nth-child(4n){height:13px}
+.dots i:hover{transform:rotate(var(--pr,0deg)) scale(1.2)}
+.dots i.on{background:radial-gradient(circle at 35% 30%,#666,#1a1a1a 65%,#000);transform:rotate(var(--pr,0deg)) scale(1.35)}
+.dots.locked i,.dots.locked .home,.dots.locked .finger{cursor:not-allowed;opacity:.45}
+.dots.locked i:hover{transform:rotate(var(--pr,0deg))}
+.dots.locked i.on{opacity:1}
 </style>
 <link rel="stylesheet" href="mick.css">
 </head>
@@ -644,11 +652,22 @@ const pages = [...document.querySelectorAll('.page')];
 const dotsWrap = document.querySelector('.dots');
 let index = 0, locked = false, timers = [];
 
+// 처음엔 순서대로 끝까지 봐야 하고, 마지막 페이지를 한 번 보면 점·홈·목록으로 원하는 페이지에 바로 갈 수 있다
+let unlocked = false;
+try { unlocked = localStorage.getItem('rs-seen-all') === '1'; } catch (e) {}
+function unlockNav() {
+  if (unlocked) return;
+  unlocked = true;
+  try { localStorage.setItem('rs-seen-all', '1'); } catch (e) {}
+  dotsWrap.classList.remove('locked');
+}
+
 pages.forEach(() => dotsWrap.appendChild(document.createElement('i')));
 const dots = [...dotsWrap.children];
+dotsWrap.classList.toggle('locked', !unlocked);
 dots.forEach((d, n) => d.addEventListener('pointerdown', e => {
   e.stopPropagation();
-  goTo(n);
+  if (unlocked) goTo(n);
 }));
 
 const home = document.createElement('button');
@@ -657,7 +676,7 @@ home.setAttribute('aria-label', '처음으로');
 home.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z"/></svg>';
 home.addEventListener('pointerdown', e => {
   e.stopPropagation();
-  goTo(0);
+  if (unlocked) goTo(0);
 });
 dotsWrap.prepend(home);
 
@@ -679,9 +698,10 @@ function toggleMenu(open) {
   finger.classList.toggle('open', open);
   navMenu.querySelectorAll('li').forEach((li, n) => li.classList.toggle('on', n === index));
 }
+finger.title = '끝까지 보면 원하는 페이지로 이동할 수 있어요';
 finger.addEventListener('pointerdown', e => {
   e.stopPropagation();
-  toggleMenu(!navMenu.classList.contains('open'));
+  if (unlocked) toggleMenu(!navMenu.classList.contains('open'));
 });
 navMenu.addEventListener('pointerdown', e => {
   e.stopPropagation();
@@ -803,6 +823,7 @@ function goTo(i) {
   stopWalk();
   index = i;
   locked = true;
+  if (i === pages.length - 1) unlockNav();
   snap();
   dots.forEach((d, n) => d.classList.toggle('on', n === i));
   timers.push(setTimeout(() => { locked = false; activate(i); }, 1000));
