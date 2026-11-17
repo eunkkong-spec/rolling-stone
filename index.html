@@ -356,17 +356,13 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .home svg{width:12px;height:12px}
 /* 자갈 모양 페이지 점: 하나하나 모양과 각도가 조금씩 다르고, 지금 페이지는 검게 칠한 돌 */
 .dots i{width:15px;height:12px;border-radius:55% 45% 50% 50% / 60% 55% 45% 40%;cursor:pointer;
-  background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.9) 0 7%,var(--c1,#e4e4e4) 24%,var(--c2,#888) 78%);box-shadow:inset -1px -2px 2px rgba(0,0,0,.25),1px 1px 1px rgba(0,0,0,.15);
+  background:radial-gradient(circle at 35% 30%,#e4e4e4,#9a9a9a 70%,#777);box-shadow:inset -1px -2px 2px rgba(0,0,0,.25),1px 1px 1px rgba(0,0,0,.15);
   outline:6px solid transparent;transform:rotate(var(--pr,0deg));transition:transform .3s,background .3s}
 .dots i:nth-child(3n){--pr:25deg;border-radius:45% 55% 60% 40% / 50% 45% 55% 50%}
 .dots i:nth-child(3n+1){--pr:-18deg;width:14px;border-radius:50% 50% 40% 60% / 45% 60% 40% 55%}
 .dots i:nth-child(4n){height:13px}
 .dots i:hover{transform:rotate(var(--pr,0deg)) scale(1.2)}
-/* 검은 자갈과 회색 자갈을 섞어서 */
-.dots i:nth-of-type(odd){--c1:#d6d6d6;--c2:#8a8a8a}
-.dots i:nth-of-type(even){--c1:#555;--c2:#111}
-.dots i:nth-of-type(3n){--c1:#b5b5b5;--c2:#5e5e5e}
-.dots i.on{--ps:1.5;outline:2px solid #111;outline-offset:2px;transform:rotate(var(--pr,0deg)) scale(1.5)}
+.dots i.on{--ps:1.35;background:radial-gradient(circle at 35% 30%,#666,#1a1a1a 65%,#000);transform:rotate(var(--pr,0deg)) scale(1.35)}
 .dots i.roll{animation:pebbleRoll .7s cubic-bezier(.3,.7,.4,1)}
 @keyframes pebbleRoll{
   0%{transform:rotate(var(--pr,0deg)) scale(var(--ps,1))}
