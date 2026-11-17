@@ -67,7 +67,6 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .p3 .stone{left:calc(718*var(--u));top:calc(457*var(--u));width:calc(490*var(--u));aspect-ratio:1;opacity:0}
 .p3 .stone .black{opacity:0;transition:opacity .6s}
 .p3.active .stone{opacity:1;cursor:pointer;animation:rollIn 2s .3s cubic-bezier(.2,.7,.3,1) both,roll 2.6s 2.3s ease-in-out infinite alternate}
-.p3.painted .stone{cursor:inherit}
 .p3.painted .stone .black{opacity:1}
 .tap{transform:translateX(-50%);opacity:0;pointer-events:none;
   font:italic 700 calc(20*var(--u)) 'Playfair Display',Georgia,serif;letter-spacing:.08em;color:#000;text-align:center;white-space:nowrap}
@@ -880,8 +879,10 @@ function goTo(i) {
 
 const p3 = document.querySelector('.p3');
 p3.querySelector('.stone').addEventListener('pointerdown', e => {
-  if (!p3.classList.contains('active') || p3.classList.contains('painted')) return;
+  if (!p3.classList.contains('active')) return;
   e.stopPropagation();
+  // 이미 검게 칠한 돌을 다시 누르면 립로고가 또 웃는다
+  if (p3.classList.contains('painted')) return laugh();
   p3.classList.add('painted');
   timers.push(setTimeout(laugh, 800));
 });
