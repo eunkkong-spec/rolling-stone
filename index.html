@@ -690,6 +690,11 @@ function startMusic() {
   }
 }
 music.addEventListener('pointerdown', e => e.stopPropagation());
+// 다른 유튜브 영상 바로가기를 누르면 재생 중이던 곡을 멈춘다
+document.querySelectorAll('a[href*="youtu"]').forEach(a => a.addEventListener('click', () => {
+  wantMusic = false;
+  if (playerReady) player.pauseVideo();
+}));
 music.querySelector('button').addEventListener('click', () => {
   wantMusic = false;
   music.classList.remove('on');
