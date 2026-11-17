@@ -407,12 +407,20 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 
 /* 낮은 가로 화면(가로로 든 폰): UI를 작게 정리 */
 @media (max-height:500px){
-  .hint{bottom:calc(2vh + 44px);letter-spacing:.15em}
+  .hint{left:2vw;bottom:calc(2vh + 8px);font-size:14px;letter-spacing:.12em;animation-name:dragHintL}
   .dots{bottom:2vh;right:2vw}
   .music{left:1.5vw;bottom:2vh;width:160px;padding:6px;font-size:12px}
   .music #yt,.music iframe{width:146px;height:110px}
   .navmenu{bottom:calc(2vh + 46px);max-height:calc(100dvh - 70px);overflow:auto;font-size:13px}
   .intro{gap:8px}
+  /* 7~11페이지 글씨가 7~9px까지 작아지므로 읽을 수 있는 최소 크기를 준다 */
+  .story{font-size:max(11px,calc(26*var(--s)));line-height:1.45}
+  .story p{margin-bottom:6px}
+  .say,.lines,.say2,.bubble,.p10 .cute,.p10 .cap{font-size:max(9px,calc(18*var(--s)))}
+  .say{line-height:max(10.5px,calc(22*var(--s)))}
+  .lines span{white-space:nowrap}
+  .p8 .lead,.pill{font-size:max(10px,calc(20*var(--s)))}
+  .url{font-size:max(8px,calc(13*var(--s)))}
 }
 
 /* 터치 기기: 손가락으로 누르기 좋게 키우고, 마우스 hover 효과는 끈다 */
@@ -441,6 +449,7 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
   .rotate p{font:clamp(24px,7vw,40px)/1.1 'Creepster',cursive;letter-spacing:.03em}
   .rotate span{font:15px/1.6 'Jalnan 2',sans-serif;color:#bbb}
 }
+@keyframes dragHintL{0%,100%{transform:none;opacity:.75}40%{transform:translateX(12px);opacity:1}55%{transform:translateX(9px)}}
 @keyframes turnPhone{0%,20%{transform:rotate(0)}50%,80%{transform:rotate(-90deg)}100%{transform:rotate(0)}}
 </style>
 <link rel="stylesheet" href="mick.css">
