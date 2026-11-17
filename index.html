@@ -56,6 +56,7 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .p3 .tongue{left:calc(543*var(--u));top:calc(0*var(--u));width:calc(317*var(--u));height:calc(478*var(--u));
   opacity:0;transform-origin:50% 70%}
 .p3 .tongue img{width:100%;height:100%;object-fit:contain}
+.p3.painted .tongue,.collage img.lick,.logo-l,.logo-r{pointer-events:auto;cursor:pointer}
 .p3.painted .tongue{animation:popLogo .5s .7s cubic-bezier(.2,1.6,.4,1) forwards,laugh .5s 1.2s ease-in-out infinite}
 @keyframes popLogo{from{opacity:1;transform:scale(0) rotate(-20deg)}to{opacity:1;transform:scale(1) rotate(0)}}
 @keyframes laugh{
@@ -891,6 +892,16 @@ p3.querySelector('.stone').addEventListener('pointerdown', e => {
   e.stopPropagation();
   p3.classList.add('painted');
   timers.push(setTimeout(laugh, 800));
+});
+
+// 립로고를 누르면 다시 하하 웃는다 (3페이지 로고, 6페이지 콜라주 혀, 7페이지 양쪽 로고)
+document.querySelectorAll('.p3 .tongue, .collage .lick, .logo-l, .logo-r').forEach(el => {
+  el.addEventListener('pointerdown', e => {
+    if (!el.closest('.page').classList.contains('active')) return;
+    if (el.classList.contains('tongue') && !p3.classList.contains('painted')) return;
+    e.stopPropagation();
+    laugh();
+  });
 });
 
 const p4 = document.querySelector('.p4');
