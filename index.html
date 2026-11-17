@@ -64,7 +64,7 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
   25%{opacity:1;transform:translate(calc(-16*var(--u)),calc(-6*var(--u))) rotate(-10deg)}
   75%{opacity:1;transform:translate(calc(16*var(--u)),calc(-6*var(--u))) rotate(10deg)}
 }
-.p3 .stone{left:calc(718*var(--u));top:calc(457*var(--u));width:calc(490*var(--u));aspect-ratio:1;opacity:0}
+.p3 .stone{left:calc(645*var(--u));top:calc(384*var(--u));width:calc(637*var(--u));aspect-ratio:1;opacity:0}
 .p3 .stone .black{opacity:0;transition:opacity .6s}
 .p3.active .stone{opacity:1;cursor:pointer;animation:rollIn 2s .3s cubic-bezier(.2,.7,.3,1) both,roll 2.6s 2.3s ease-in-out infinite alternate}
 .p3.painted .stone .black{opacity:1}
@@ -320,6 +320,15 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .music b{display:block;margin:0 0 6px 2px;font-weight:400}
 .music button{position:absolute;top:4px;right:6px;border:0;background:none;font:22px/1 sans-serif;color:#111;cursor:pointer}
 .music #yt,.music iframe{display:block;width:200px;height:200px;border-radius:8px}
+.ytmodal{position:fixed;z-index:20;inset:0;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.78);
+  opacity:0;pointer-events:none;transition:opacity .3s}
+.ytmodal.open{opacity:1;pointer-events:auto}
+.ytbox{position:relative;width:min(960px,92vw,calc((86vh - 24px) * 16 / 9));padding:12px;border:3px solid #111;border-radius:18px;
+  background:#ffe600;box-shadow:10px 10px 0 #111;transform:scale(.9);transition:transform .35s cubic-bezier(.2,1.6,.4,1)}
+.ytmodal.open .ytbox{transform:none}
+.ytbox iframe{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:10px;background:#000}
+.ytbox button{position:absolute;top:-18px;right:-18px;width:40px;height:40px;border:3px solid #111;border-radius:50%;
+  background:#fff;box-shadow:3px 3px 0 #111;font:26px/1 sans-serif;color:#111;cursor:pointer}
 .intro{position:fixed;z-index:10;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
   background:rgba(250,248,244,.92);cursor:pointer;transition:opacity .6s}
 .intro p{font:52px 'Creepster',cursive;letter-spacing:.12em;color:#111;animation:blink 1.6s infinite}
@@ -657,6 +666,8 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
   모든 이미지·음원·영상의 저작권은 각 권리자에게 있습니다.</small></div>
 <div class="dots"></div>
 
+<div class="ytmodal"><div class="ytbox"><button type="button" aria-label="닫기">&times;</button><iframe title="YouTube 영상" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div></div>
+
 <div class="music"><b>&#9835; Paint It, Black</b><button type="button" aria-label="음악 끄기">&times;</button><div id="yt"></div></div>
 
 <script src="mick.js"></script>
@@ -817,8 +828,35 @@ function pauseMusic() {
 }
 document.querySelectorAll('a[href*="youtu"]').forEach(a => {
   a.addEventListener('pointerdown', () => { leftForLink = Date.now(); pauseMusic(); });
-  a.addEventListener('click', pauseMusic);
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    pauseMusic();
+    openVideo(a.href);
+  });
 });
+
+// 유튜브 바로가기는 새 창 대신 모달로 띄운다
+const ytModal = document.querySelector('.ytmodal');
+const ytFrame = ytModal.querySelector('iframe');
+function openVideo(href) {
+  const url = new URL(href);
+  const id = url.hostname.includes('youtu.be') ? url.pathname.slice(1) : url.searchParams.get('v');
+  ytFrame.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+  ytModal.classList.add('open');
+}
+function closeVideo() {
+  ytModal.classList.remove('open');
+  ytFrame.src = '';
+}
+ytModal.addEventListener('pointerdown', e => {
+  e.stopPropagation();
+  if (e.target === ytModal || e.target.closest('button')) closeVideo();
+});
+window.addEventListener('keydown', e => {
+  if (!ytModal.classList.contains('open')) return;
+  e.stopImmediatePropagation();
+  if (e.key === 'Escape') closeVideo();
+}, true);
 // 새 탭으로 넘어가 페이지가 가려질 때 한 번 더 멈춘다 (광고 재생 중 등 첫 요청이 무시된 경우 대비)
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && Date.now() - leftForLink < 5000) pauseMusic();
