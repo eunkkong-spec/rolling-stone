@@ -391,6 +391,57 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .dots.locked i,.dots.locked .home,.dots.locked .finger{cursor:not-allowed;opacity:.45}
 .dots.locked i:hover{transform:rotate(var(--pr,0deg))}
 .dots.locked i.on{opacity:1}
+
+/* ===== 반응형 1단계 ===== */
+/* 모바일 브라우저 주소창 높이를 빼고 계산 (dvh 지원 브라우저) */
+@supports (height:100dvh){
+  :root{--u:calc(min(100vw,133.333dvh) / 1200)}
+  .track,.page{height:100dvh}
+  .collage{--v:calc(max(100vw,192dvh) / 1920)}
+  .sheet{--s:calc(min(100vw,192dvh) / 1920)}
+}
+/* 화면이 작아져도 안내·UI 글씨가 읽을 수 있는 크기 아래로 내려가지 않게 */
+.hint{font-size:clamp(15px,2.8vh,30px)}
+.intro p{font-size:clamp(30px,7vw,52px)}
+.intro small{font-size:clamp(11px,1.6vh,13px)}
+
+/* 낮은 가로 화면(가로로 든 폰): UI를 작게 정리 */
+@media (max-height:500px){
+  .hint{bottom:calc(2vh + 44px);letter-spacing:.15em}
+  .dots{bottom:2vh;right:2vw}
+  .music{left:1.5vw;bottom:2vh;width:160px;padding:6px;font-size:12px}
+  .music #yt,.music iframe{width:146px;height:110px}
+  .navmenu{bottom:calc(2vh + 46px);max-height:calc(100dvh - 70px);overflow:auto;font-size:13px}
+  .intro{gap:8px}
+}
+
+/* 터치 기기: 손가락으로 누르기 좋게 키우고, 마우스 hover 효과는 끈다 */
+@media (hover:none),(pointer:coarse){
+  .dots{gap:12px}
+  .dots i{width:20px;height:16px;outline-width:10px}
+  .dots i:nth-child(3n+1){width:19px}
+  .dots i:nth-child(4n){height:17px}
+  .home,.mute{width:34px;height:34px;font-size:15px}
+  .home svg{width:16px;height:16px}
+  .finger{width:38px;height:38px;font-size:19px}
+  .navmenu li{padding:12px 14px}
+  .dots i:hover,.home:hover,.mute:hover,.finger:hover,.tube:hover::after{transform:none}
+  .dots i:hover{transform:rotate(var(--pr,0deg))}
+  .dots i.on:hover{transform:rotate(var(--pr,0deg)) scale(1.35)}
+  .ytbox button{width:48px;height:48px;top:-14px;right:-10px}
+}
+
+/* 세로로 든 폰·좁은 태블릿: 가로로 돌려 달라는 안내 */
+.rotate{display:none}
+@media (orientation:portrait) and (max-width:900px){
+  .rotate{position:fixed;z-index:30;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+    padding:24px;background:#111;color:#fff;text-align:center}
+  .rotate .phone{width:64px;height:110px;border:5px solid #ffe600;border-radius:14px;position:relative;animation:turnPhone 2.4s ease-in-out infinite}
+  .rotate .phone::after{content:'';position:absolute;left:50%;bottom:8px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#ffe600}
+  .rotate p{font:clamp(24px,7vw,40px)/1.1 'Creepster',cursive;letter-spacing:.03em}
+  .rotate span{font:15px/1.6 'Jalnan 2',sans-serif;color:#bbb}
+}
+@keyframes turnPhone{0%,20%{transform:rotate(0)}50%,80%{transform:rotate(-90deg)}100%{transform:rotate(0)}}
 </style>
 <link rel="stylesheet" href="mick.css">
 </head>
@@ -676,6 +727,8 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
   <small>이 페이지는 비상업적 팬 페이지이며 포트폴리오용으로 제작되었습니다.<br>
   모든 이미지·음원·영상의 저작권은 각 권리자에게 있습니다.</small></div>
 <div class="dots"></div>
+
+<div class="rotate" aria-live="polite"><div class="phone"></div><p>Turn your phone</p><span>가로로 돌려서 봐 주세요<br>가로 화면에 맞춰 만든 페이지예요</span></div>
 
 <div class="ytmodal"><div class="ytbox"><button type="button" aria-label="닫기">&times;</button><iframe title="YouTube 영상" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div></div>
 
