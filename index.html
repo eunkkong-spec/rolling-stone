@@ -49,7 +49,7 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
   font-family:'Creepster',cursive;font-size:calc(84*var(--u));line-height:1.3;text-align:center;white-space:nowrap}
 .p2 .ko{left:calc(600*var(--u));top:calc(723*var(--u));transform:translateX(-50%);
   font:400 calc(32*var(--u)) 'Dokdo',cursive;white-space:nowrap}
-.p2 .stone{left:calc(683*var(--u));top:calc(358*var(--u));width:calc(490*var(--u));aspect-ratio:1;opacity:0}
+.p2 .stone{left:calc(700*var(--u));top:calc(285*var(--u));width:calc(637*var(--u));aspect-ratio:1;opacity:0}
 .p2.active .stone{animation:fadeIn .5s 5s forwards,roll 2.6s 5.3s ease-in-out infinite alternate}
 
 .p3 .copy{left:calc(679*var(--u));top:calc(445*var(--u));transform:translateX(-50%);font-size:calc(94*var(--u));line-height:1.05}
@@ -70,12 +70,19 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .p3.painted .stone .black{opacity:1}
 .tap{transform:translateX(-50%);opacity:0;pointer-events:none;
   font:italic 700 calc(20*var(--u)) 'Playfair Display',Georgia,serif;letter-spacing:.08em;color:#000;text-align:center;white-space:nowrap}
-.tap i{display:block;width:calc(12*var(--u));height:calc(12*var(--u));margin:calc(-2*var(--u)) auto 0;
-  border:solid #000;border-width:0 calc(3*var(--u)) calc(3*var(--u)) 0;transform:rotate(45deg);opacity:.15;
-  animation:chevron 1s var(--d) infinite}
-.tap i:first-of-type{margin-top:calc(6*var(--u))}
-@keyframes chevron{0%,100%{opacity:.15}30%{opacity:1}}
-.p3 .tap{left:calc(1033*var(--u));top:calc(470*var(--u))}
+/* 크레용으로 그은 듯한 손그림 화살표: 그려졌다가 대상 쪽으로 콕콕 찌르며 클릭을 유도 */
+.tap .ct{display:inline-block;animation:tapWiggle 1.6s ease-in-out infinite}
+@keyframes tapWiggle{0%,60%,100%{transform:none}70%{transform:scale(1.15) rotate(-6deg)}80%{transform:scale(1.1) rotate(5deg)}90%{transform:scale(1.12) rotate(-3deg)}}
+.tap .arrow{display:block;margin:calc(4*var(--u)) auto 0;overflow:visible;filter:url(#crayon);animation:nudge .8s ease-in-out infinite}
+.tap .arrow.down{width:calc(54*var(--u));height:calc(90*var(--u));--nx:0;--ny:1}
+.tap .arrow.left{display:inline-block;margin:0 calc(6*var(--u)) 0 0;width:calc(96*var(--u));height:calc(58*var(--u));--nx:-1;--ny:0}
+.tap .arrow path{fill:none;stroke:#111;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;
+  animation:drawShaft 1.6s ease-out infinite}
+.tap .arrow path+path{animation-name:drawHead}
+@keyframes drawShaft{0%{stroke-dashoffset:1;opacity:1}35%,85%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+@keyframes drawHead{0%,35%{stroke-dashoffset:1;opacity:1}50%,85%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+@keyframes nudge{0%,100%{transform:none}50%{transform:translate(calc(var(--nx)*8*var(--u)),calc(var(--ny)*8*var(--u)))}}
+.p3 .tap{left:calc(1040*var(--u));top:calc(400*var(--u))}
 .p3.active:not(.painted) .tap{animation:fadeIn .4s 3.2s forwards}
 @keyframes rollIn{from{transform:translateX(calc(-1300*var(--u))) rotate(-1080deg)}to{transform:translateX(0) rotate(0)}}
 
@@ -204,7 +211,6 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 .p8.painted .rock img{animation:spin 6s linear infinite,blacken .8s forwards}
 @keyframes blacken{to{filter:brightness(.2) contrast(1.2)}}
 .p8 .tap{display:flex;align-items:center;gap:calc(6*var(--s));transform:none}
-.p8 .tap i{display:inline-block;margin:0;transform:rotate(135deg)}
 .p8.active:not(.painted) .tap{animation:fadeIn .4s 4.8s forwards}
 @keyframes spin{to{transform:rotate(360deg)}}
 .tri{width:calc(360*var(--s));opacity:0;transform-origin:45% 30%;filter:drop-shadow(0 calc(5*var(--s)) calc(3*var(--s)) rgba(0,0,0,.18))}
@@ -439,7 +445,7 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
         <img src="images/stone-gray.png" alt="">
         <img class="black" src="images/stone-black.png" alt="검게 칠해진 돌">
       </div>
-      <div class="tap">CLICK!!<i style="--d:0s"></i><i style="--d:.2s"></i><i style="--d:.4s"></i></div>
+      <div class="tap"><span class="ct">CLICK!!</span><svg class="arrow down" viewBox="0 0 60 100"><g transform="translate(60 0) rotate(90)"><path pathLength="1" d="M6 36C18 8 34 10 42 30S66 42 90 30"/><path pathLength="1" d="M74 17L91 30L77 45"/></g></svg></div>
     </div>
   </section>
 
@@ -462,7 +468,7 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
       <div class="album"><img src="images/album.png" alt="The Rolling Stones 앨범"></div>
       <div class="kicker"><img src="images/mick-kick.png" alt="페인트 통을 걷어차는 믹 재거"></div>
       <div class="can4"><img src="images/can.png" alt="페인트 통"></div>
-      <div class="tap">CLICK!!<i style="--d:0s"></i><i style="--d:.2s"></i><i style="--d:.4s"></i></div>
+      <div class="tap"><span class="ct">CLICK!!</span><svg class="arrow down" viewBox="0 0 60 100"><g transform="translate(60 0) rotate(90)"><path pathLength="1" d="M6 36C18 8 34 10 42 30S66 42 90 30"/><path pathLength="1" d="M74 17L91 30L77 45"/></g></svg></div>
       <img id="mick" src="images/walk/01_contact_4-1.png" alt="걷는 믹 재거">
     </div>
   </section>
@@ -557,7 +563,7 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
         <p>A rolling stone<br>gathers<br>no<br>moss.</p>
       </div>
       <div class="stk rock" style="--x:794;--y:295;--w:252;--r:-20deg;--d:1.1s"><div><img src="images/.SUB2/stone-gray.png" alt="구르는 돌"></div></div>
-      <div class="tap" style="--x:1040;--y:385"><i style="--d:.4s"></i><i style="--d:.2s"></i><i style="--d:0s"></i>CLICK!!</div>
+      <div class="tap" style="--x:1040;--y:385"><svg class="arrow left" viewBox="0 0 100 60"><g transform="translate(100 0) scale(-1 1)"><path pathLength="1" d="M6 36C18 8 34 10 42 30S66 42 90 30"/><path pathLength="1" d="M74 17L91 30L77 45"/></g></svg><span class="ct">CLICK!!</span></div>
       <p class="bubble" style="--x:1100;--y:150">롤링스톤즈는 1962년 런던에서 록 밴드를 결성하며<br>
         지금까지 꾸준히 활동하고 있다.<br>
         마치 구르는 돌에 이끼가 끼지 않은 듯...</p>
@@ -659,6 +665,7 @@ img{display:block;pointer-events:none;-webkit-user-drag:none}
 
 </main>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="crayon"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="5"/></filter></svg>
 <p class="hint">CLICK OR DRAG &rarr;</p>
 <div class="intro"><p>CLICK TO START</p>
   <div class="snd"><button type="button">&#128263; SOUND OFF</button></div>
